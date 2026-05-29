@@ -7,9 +7,9 @@
  * Supports ignore rules using merge-ignore.txt
  */
 
-const fs = require("fs");
-const path = require("path");
-const ignore = require("ignore");
+import fs from "fs";
+import path from "path";
+import ignore from "ignore";
 
 const ROOT_DIR = process.cwd();
 console.log("Root DIR :: ", ROOT_DIR);

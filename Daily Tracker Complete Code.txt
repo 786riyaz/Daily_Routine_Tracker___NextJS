@@ -1,0 +1,3016 @@
+// eslint.config.js
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+export default defineConfig([
+globalIgnores(['dist']),
+{
+files: ['**/*.{js,jsx}'],
+extends: [
+js.configs.recommended,
+reactHooks.configs['recommended-latest'],
+reactRefresh.configs.vite,
+],
+languageOptions: {
+ecmaVersion: 2020,
+globals: globals.browser,
+parserOptions: {
+ecmaVersion: 'latest',
+ecmaFeatures: { jsx: true },
+sourceType: 'module',
+},
+},
+rules: {
+'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+},
+},
+])
+====================================================================
+// index.html
+<!-- index.html -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Personal Activity Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+<div id="root"><html lang="en">
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Activity Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+<div id="root"></div>
+<script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
+></div>
+<script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
+====================================================================
+// package.json
+{
+"name": "personal_tracker",
+"private": true,
+"version": "0.0.0",
+"type": "module",
+"scripts": {
+"dev": "vite",
+"build": "vite build",
+"lint": "eslint .",
+"preview": "vite preview"
+},
+"dependencies": {
+"ignore": "^7.0.5",
+"react": "^19.1.1",
+"react-dom": "^19.1.1",
+"react-router-dom": "^7.10.1"
+},
+"devDependencies": {
+"@eslint/js": "^9.35.0",
+"@types/react": "^19.1.13",
+"@types/react-dom": "^19.1.9",
+"@vitejs/plugin-react": "^5.0.2",
+"eslint": "^9.35.0",
+"eslint-plugin-react-hooks": "^5.2.0",
+"eslint-plugin-react-refresh": "^0.4.20",
+"globals": "^16.4.0",
+"vite": "^7.1.6"
+}
+}
+====================================================================
+// src\activityConfig.js
+// src/activityConfig.js
+// CATEGORY VISUAL META (icon + color)
+export const CATEGORY_META = {
+"Salah": { icon: "🕌", color: "#7c3aed" },
+"Health": { icon: "🏋", color: "#16a34a" },
+"Islamic Learning": { icon: "📖", color: "#0ea5e9" },
+"Programming": { icon: "💻", color: "#4f46e5" },
+"Work": { icon: "💼", color: "#7c3aed" },
+"Learning": { icon: "🎓", color: "#0ea5e9" },
+"Aptitude": { icon: "🧠", color: "#eab308" },
+"English / Interview": { icon: "🎙", color: "#ec4899" },
+"Family & Social": { icon: "👨‍👩‍👧", color: "#06b6d4" },
+"Life Skills": { icon: "🚗", color: "#22c55e" },
+"Personal": { icon: "🙋", color: "#64748b" },
+"Reflection / Night": { icon: "🌙", color: "#475569" },
+"Other / Custom": { icon: "🧩", color: "#9ca3af" },
+};
+// export const CATEGORY_ORDER = Object.keys(CATEGORY_META);
+export const CATEGORY_ORDER = [
+"Salah",
+"Health",
+"Islamic Learning",
+"Programming",
+"Learning",
+"Work",
+"Aptitude",
+"English / Interview",
+"Family & Social",
+"Life Skills",
+"Personal",
+"Reflection / Night",
+"Other / Custom",
+];
+// DEFAULT DAILY ACTIVITIES
+export const DEFAULT_DAILY = {
+// 5:30 AM Routine
+"Fajr Salah": { time: "05:30", category: "Salah" },
+"Gym Workout (30 min)": { time: "05:50", category: "Health" },
+"Quran Recitation (15 min)": { time: "06:20", category: "Islamic Learning" },
+"Breakfast & Freshen Up": { time: "06:35", category: "Personal" },
+// 6:30 – 9:30 AM Personal Development Block
+"Car Driving Practice": { time: "06:30", category: "Life Skills" },
+"Technical Learning": { time: "07:00", category: "Learning" },
+"Islamic Studies": { time: "07:30", category: "Islamic Learning" },
+"Reflection Journaling": { time: "08:00", category: "Reflection / Night" },
+// Flexible Learning — often coding → Programming
+"Flexible Learning / Creative Practice / Programming": {
+time: "08:15",
+category: "Programming",
+},
+// Work Preparation
+"Work Preparation": { time: "09:30", category: "Work" },
+// Work Session 1
+"Work Session 1": { time: "10:00", category: "Work" },
+"Short Break": { time: "11:30", category: "Personal" },
+// Dhuhr & Lunch
+"Dhuhr Salah": { time: "13:30", category: "Salah" },
+"Lunch Break": { time: "13:40", category: "Personal" },
+// Qailulah
+"Qailulah (Power Nap)": { time: "14:30", category: "Health" },
+// Work Session 2
+"Work Session 2": { time: "15:00", category: "Work" },
+"Short Break (Stretch)": { time: "16:00", category: "Health" },
+"Asr Salah": { time: "17:30", category: "Salah" },
+// Work Session 3
+"Work Session 3": { time: "17:30", category: "Work" },
+// Maghrib + Evening Creativity
+"Maghrib Salah": { time: "19:30", category: "Salah" },
+// Creative problem solving = Personal Development → Learning category
+"Creative Problem Solving / Reading": {
+time: "19:50",
+category: "Learning",
+},
+// Isha & Family
+"Isha Salah": { time: "21:00", category: "Salah" },
+"Family / Social Time": { time: "21:10", category: "Family & Social" },
+// Night Routine
+"Quran Reflection": { time: "21:45", category: "Islamic Learning" },
+"Wind Down & Sleep": { time: "22:00", category: "Reflection / Night" },
+};
+export const DEFAULT_DAILY_NAMES = Object.keys(DEFAULT_DAILY);
+export const DEFAULT_DAILY_SET = new Set(DEFAULT_DAILY_NAMES);
+// DEFAULT WEEKLY ACTIVITIES
+export const DEFAULT_WEEKLY = {
+"Programming Technology + English Grammar": {
+category: "Programming",
+days: ["Mon"],
+},
+"Aptitude Practice + Mock Interviews": {
+category: "Aptitude",
+days: ["Tue"],
+},
+"Programming Concepts (New Tech) + Vocabulary": {
+category: "Programming",
+days: ["Wed"],
+},
+"Aptitude Tests + Speaking Practice": {
+category: "Aptitude",
+days: ["Thu"],
+},
+"Programming Projects + Jumu'ah & Islamic Studies": {
+category: "Programming",
+days: ["Fri"],
+},
+"English Mock Interviews + Programming Revision": {
+category: "English / Interview",
+days: ["Sat"],
+},
+"Family & Friends + Planning": {
+category: "Family & Social",
+days: ["Sun"],
+},
+"Habit Tracking Review": {
+category: "Reflection / Night",
+days: ["Sun"],
+},
+"Diverse Content (Podcast / Book)": {
+category: "Learning",
+days: ["Sun"],
+},
+"Networking / Developer Community": {
+category: "Work",
+days: ["Sun"],
+},
+
+"Sunday Habit Tracking (8:00 AM)": {
+category: "Reflection / Night",
+days: ["Sun"],
+},
+"Weekly Diverse Content (8:15 AM Block)": {
+category: "Learning",
+days: ["Sun"],
+},
+"Sunday Networking (8:30 PM)": {
+category: "Work",
+days: ["Sun"],
+},
+};
+export const DEFAULT_WEEKLY_ITEMS = Object.entries(DEFAULT_WEEKLY).map(
+([name, v]) => ({
+name,
+days: v.days || [],
+})
+);
+export const DEFAULT_WEEKLY_SET = new Set(Object.keys(DEFAULT_WEEKLY));
+// HELPERS FOR ACTIVITY METADATA
+export function formatTimeLabel(time24) {
+if (!time24) return "";
+const [hStr, mStr = "00"] = time24.split(":");
+let h = parseInt(hStr, 10);
+if (Number.isNaN(h)) return "";
+const ampm = h >= 12 ? "PM" : "AM";
+const h12 = h % 12 === 0 ? 12 : h % 12;
+const hh = String(h12).padStart(2, "0");
+return `${hh}:${mStr} ${ampm}`;
+}
+export function getDailyMeta(name, customMeta = {}) {
+const custom = customMeta[name];
+if (custom) {
+const time = custom.time || "";
+return {
+category: custom.category || "Other / Custom",
+time,
+timeLabel: formatTimeLabel(time),
+sortKey: time || "99:99",
+};
+}
+const def = DEFAULT_DAILY[name];
+if (def) {
+const time = def.time || "";
+return {
+category: def.category || "Other / Custom",
+time,
+timeLabel: formatTimeLabel(time),
+sortKey: time || "99:99",
+};
+}
+return {
+category: "Other / Custom",
+time: "",
+timeLabel: "",
+sortKey: "99:99",
+};
+}
+export function getWeeklyMeta(name) {
+const def = DEFAULT_WEEKLY[name];
+return {
+category: def?.category || "Other / Custom",
+time: "",
+timeLabel: "",
+};
+}
+====================================================================
+// src\ActivityForm.jsx
+// src/ActivityForm.jsx
+import React, { useState } from "react";
+export default function ActivityForm({ addActivity }) {
+const [value, setValue] = useState("");
+const handleSubmit = (e) => {
+e.preventDefault();
+if (!value.trim()) return;
+addActivity(value.trim());
+setValue("");
+};
+return (
+<form className="form" onSubmit={handleSubmit}>
+<input
+className="input"
+type="text"
+placeholder="Enter new activity..."
+value={value}
+onChange={(e) => setValue(e.target.value)}
+/>
+<button className="btn" type="submit">
+Add
+</button>
+</form>
+);
+}
+====================================================================
+// src\ActivityItem.jsx
+// src/ActivityItem.jsx
+import React from "react";
+export default function ActivityItem({
+activity,
+toggleCompleted,
+deleteActivity,
+}) {
+return (
+<div className="item-row">
+<span
+className={activity.completed ? "done-text" : ""}
+onClick={() => toggleCompleted(activity.id)}
+>
+{activity.name}
+</span>
+<button
+className="icon-btn danger"
+type="button"
+onClick={() => deleteActivity(activity.id)}
+>
+✖
+</button>
+</div>
+);
+}
+====================================================================
+// src\ActivityList.jsx
+// src/ActivityList.jsx
+import React from "react";
+import ActivityItem from "./ActivityItem";
+export default function ActivityList({
+activities,
+toggleCompleted,
+deleteActivity,
+}) {
+if (!activities || activities.length === 0) {
+return <p className="muted">No activities yet.</p>;
+}
+return (
+<div className="list">
+{activities.map((a) => (
+<ActivityItem
+key={a.id}
+activity={a}
+toggleCompleted={toggleCompleted}
+deleteActivity={deleteActivity}
+/>
+))}
+</div>
+);
+}
+====================================================================
+// src\App.jsx
+// src/App.jsx
+import React, { useEffect, useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Navbar from "./Navbar.jsx";
+import Tracker from "./Tracker.jsx";
+import Dashboard from "./Dashboard.jsx";
+import Setup from "./Setup.jsx";
+import MonthView from "./MonthView.jsx";
+import Todo from "./ToDo.jsx";
+import {
+DEFAULT_DAILY_NAMES,
+DEFAULT_WEEKLY_ITEMS,
+} from "./activityConfig";
+const THEME_CLASSES = ["theme-light", "theme-dark", "theme-purple"];
+function applyThemeClass(theme) {
+THEME_CLASSES.forEach((cls) => document.body.classList.remove(cls));
+document.body.classList.add(`theme-${theme}`);
+}
+export default function App() {
+const [activities, setActivities] = useState({ daily: [], weekly: [] });
+const [history, setHistory] = useState({});
+const [currentDate, setCurrentDate] = useState(
+new Date().toLocaleDateString("en-CA")
+);
+const [theme, setTheme] = useState("purple");
+const [initialized, setInitialized] = useState(false);
+// per-activity overrides: { name: { time, category } }
+const [customMeta, setCustomMeta] = useState({});
+// -----------------------------
+// INITIAL LOAD
+// -----------------------------
+useEffect(() => {
+// Theme
+let savedTheme = localStorage.getItem("theme");
+if (!["light", "dark", "purple"].includes(savedTheme)) {
+savedTheme = "purple"; // default = purple
+}
+setTheme(savedTheme);
+applyThemeClass(savedTheme);
+const normalizeDaily = (arr) =>
+(arr || [])
+.map((x) => (typeof x === "string" ? x : x?.name))
+.filter(Boolean);
+const normalizeWeekly = (arr) =>
+(arr || [])
+.map((w) => (w?.name ? { name: w.name, days: w.days || [] } : null))
+.filter(Boolean);
+const saved = localStorage.getItem("activities");
+let loaded;
+if (!saved) {
+loaded = {
+daily: [...DEFAULT_DAILY_NAMES],
+weekly: [...DEFAULT_WEEKLY_ITEMS],
+};
+} else {
+loaded = JSON.parse(saved);
+// Ensure structure integrity if needed, but trust the persistence for content
+if (!loaded.daily) loaded.daily = [];
+if (!loaded.weekly) loaded.weekly = [];
+}
+setActivities(loaded);
+const savedHistory = localStorage.getItem("activity_history");
+setHistory(savedHistory ? JSON.parse(savedHistory) : {});
+const savedMeta = localStorage.getItem("activity_meta");
+setCustomMeta(savedMeta ? JSON.parse(savedMeta) : {});
+setInitialized(true);
+}, []);
+// -----------------------------
+// SAVE ACTIVITIES
+// -----------------------------
+useEffect(() => {
+if (!initialized) return;
+localStorage.setItem("activities", JSON.stringify(activities));
+}, [activities, initialized]);
+// -----------------------------
+// SAVE HISTORY
+// -----------------------------
+useEffect(() => {
+if (!initialized) return;
+localStorage.setItem("activity_history", JSON.stringify(history));
+}, [history, initialized]);
+// -----------------------------
+// SAVE CUSTOM META
+// -----------------------------
+useEffect(() => {
+if (!initialized) return;
+localStorage.setItem("activity_meta", JSON.stringify(customMeta));
+}, [customMeta, initialized]);
+// -----------------------------
+// TOGGLE CHECKBOX
+// -----------------------------
+const updateDayStatus = (type, name, value) => {
+setHistory((prev) => {
+const old = prev[currentDate] || { daily: {}, weekly: {} };
+const updated = {
+daily: { ...old.daily },
+weekly: { ...old.weekly },
+};
+if (type === "daily") updated.daily[name] = value;
+if (type === "weekly") updated.weekly[name] = value;
+return { ...prev, [currentDate]: updated };
+});
+};
+// -----------------------------
+// SWITCH THEME
+// -----------------------------
+const toggleTheme = () => {
+const order = ["light", "dark", "purple"];
+const next = order[(order.indexOf(theme) + 1) % order.length];
+setTheme(next);
+applyThemeClass(next);
+localStorage.setItem("theme", next);
+};
+const themeLabel =
+theme === "light" ? "☀ Light" : theme === "dark" ? "🌙 Dark" : "💜 Purple";
+// -----------------------------
+// EXPORT / IMPORT
+// -----------------------------
+const exportBackup = () => {
+const data = {
+activities,
+history,
+customMeta,
+exportedAt: new Date().toISOString(),
+};
+const blob = new Blob([JSON.stringify(data, null, 2)], {
+type: "application/json",
+});
+const url = URL.createObjectURL(blob);
+const a = document.createElement("a");
+a.href = url;
+a.download = "activity_backup.json";
+a.click();
+URL.revokeObjectURL(url);
+};
+const importBackup = (e) => {
+const file = e.target.files?.[0];
+if (!file) return;
+const reader = new FileReader();
+reader.onload = (x) => {
+try {
+const json = JSON.parse(x.target.result);
+setActivities(json.activities || {});
+setHistory(json.history || {});
+setCustomMeta(json.customMeta || {});
+alert("Backup restored!");
+} catch {
+alert("Invalid backup file.");
+}
+};
+reader.readAsText(file);
+};
+// -----------------------------
+// RENDER
+// -----------------------------
+return (
+<div className="app-shell">
+{/* HEADER */}
+<header className="app-header">
+<div className="header-top">
+<div>
+<h1>Activity Tracker</h1>
+<p className="muted">
+Track your daily & weekly activities with a clean minimal UI.
+</p>
+</div>
+<div className="header-right">
+<button className="btn-small ghost" onClick={toggleTheme}>
+{themeLabel}
+</button>
+<button className="btn-small" onClick={exportBackup}>
+⬇ Export
+</button>
+<label className="btn-small import-btn">
+⬆ Import
+<input
+hidden
+type="file"
+accept="application/json"
+onChange={importBackup}
+/>
+</label>
+</div>
+</div>
+{/* TOP NAV */}
+<Navbar />
+</header>
+{/* PAGES */}
+<main className="layout">
+<Routes>
+<Route
+path="/tracker"
+element={
+<Tracker
+activities={activities}
+history={history}
+currentDate={currentDate}
+setCurrentDate={setCurrentDate}
+updateDayStatus={updateDayStatus}
+customMeta={customMeta}
+/>
+}
+/>
+<Route path="/todo" element={<Todo />} />
+<Route
+path="/dashboard"
+element={
+<Dashboard
+activities={activities}
+history={history}
+customMeta={customMeta}
+/>
+}
+/>
+<Route
+path="/setup"
+element={
+<Setup
+activities={activities}
+setActivities={setActivities}
+customMeta={customMeta}
+setCustomMeta={setCustomMeta}
+/>
+}
+/>
+<Route
+path="/month-view"
+element={
+<MonthView
+activities={activities}
+history={history}
+customMeta={customMeta}
+/>
+}
+/>
+<Route path="*" element={<Navigate to="/tracker" replace />} />
+</Routes>
+</main>
+</div>
+);
+}
+====================================================================
+// src\CategoryPill.jsx
+// src/CategoryPill.jsx
+import React from "react";
+import { CATEGORY_META } from "./activityConfig";
+export default function CategoryPill({ category }) {
+const meta = CATEGORY_META[category] || CATEGORY_META["Other / Custom"];
+return (
+<span className="cat-pill" style={{ backgroundColor: meta.color }}>
+<span className="cat-pill-icon">{meta.icon}</span>
+<span className="cat-pill-text">{category}</span>
+</span>
+);
+}
+====================================================================
+// src\Dashboard.jsx
+// src/Dashboard.jsx
+import React, { useState, useMemo } from "react";
+import { getDailyMeta, getWeeklyMeta } from "./activityConfig";
+import CategoryPill from "./CategoryPill";
+export default function Dashboard({ activities, history, customMeta }) {
+const [selected, setSelected] = useState(null);
+const dates = Object.keys(history).sort((a, b) => b.localeCompare(a));
+const formatDate = (dateString) => {
+const d = new Date(dateString);
+if (Number.isNaN(d.getTime())) return dateString;
+return d.toLocaleDateString("en-GB", {
+weekday: "short",
+day: "2-digit",
+month: "short",
+year: "numeric",
+});
+};
+const getStatsForDate = (date) => {
+const entry = history[date] || { daily: {}, weekly: {} };
+const dailyDone = activities.daily.filter((n) => entry.daily?.[n]).length;
+const weeklyDone = activities.weekly.filter(
+(w) => entry.weekly?.[w.name]
+).length;
+return { dailyDone, weeklyDone };
+};
+const progressPercent = useMemo(() => {
+if (!selected) return 0;
+const { dailyDone, weeklyDone } = getStatsForDate(selected);
+const total = activities.daily.length + activities.weekly.length;
+const completed = dailyDone + weeklyDone;
+if (total === 0) return 0;
+return Math.round((completed / total) * 100);
+}, [selected, activities, history]);
+const selectedEntry = selected ? history[selected] || {} : {};
+const selectedDaily = selectedEntry.daily || {};
+const selectedWeekly = selectedEntry.weekly || {};
+return (
+<div className="card">
+{/* HEADER WITH PROGRESS CIRCLE */}
+<div className="dashboard-header">
+<h2>Dashboard</h2>
+<div
+className="progress-circle"
+style={{ "--progress": progressPercent }}
+>
+<span>{progressPercent}%</span>
+</div>
+</div>
+{dates.length === 0 && (
+<p className="muted">No history yet. Start tracking activities.</p>
+)}
+{dates.length > 0 && (
+<div className="dashboard">
+{/* DATE LIST COLUMN */}
+<div className="date-list">
+{dates.map((date) => {
+const { dailyDone, weeklyDone } = getStatsForDate(date);
+const active = selected === date;
+return (
+<button
+key={date}
+className={`date-list-btn ${active ? "selected" : ""}`}
+onClick={() => setSelected(date)}
+>
+<div className="date-main-line">{formatDate(date)}</div>
+<div className="date-sub-line">
+<span className="pill tiny">
+D: {dailyDone}/{activities.daily.length}
+</span>
+<span className="pill tiny">
+W: {weeklyDone}/{activities.weekly.length}
+</span>
+</div>
+</button>
+);
+})}
+</div>
+{/* DETAILS COLUMN */}
+<div className="details">
+{!selected && (
+<p className="muted">Select any date to see activity details.</p>
+)}
+{selected && (
+<>
+<h3 className="detail-date">{formatDate(selected)}</h3>
+{/* DAILY DETAILS */}
+<div className="detail-block">
+<h4 className="detail-block-title">Daily Tasks</h4>
+<ul className="detail-block-list">
+{activities.daily.map((name) => {
+const done = !!selectedDaily[name];
+const meta = getDailyMeta(name, customMeta);
+return (
+<li key={name} className="detail-row">
+<div className="activity-row">
+<div className="activity-left">
+<span
+className={done ? "done-text" : "miss-text"}
+>
+{name}
+</span>
+</div>
+<div className="activity-center">
+<CategoryPill category={meta.category} />
+</div>
+<div className="activity-right">
+{meta.timeLabel && (
+<span className="time-pill">
+{meta.timeLabel}
+</span>
+)}
+</div>
+</div>
+<span
+className={`status-pill ${done ? "ok" : "miss"}`}
+>
+{done ? "Done" : "Missed"}
+</span>
+</li>
+);
+})}
+</ul>
+</div>
+{/* WEEKLY DETAILS */}
+<div className="detail-block">
+<h4 className="detail-block-title">Weekly Tasks</h4>
+<ul className="detail-block-list">
+{activities.weekly.map((w) => {
+const done = !!selectedWeekly[w.name];
+const meta = getWeeklyMeta(w.name);
+return (
+<li key={w.name} className="detail-row">
+<div className="activity-row">
+<div className="activity-left">
+<span
+className={done ? "done-text" : "miss-text"}
+>
+{w.name}
+</span>
+</div>
+<div className="activity-center">
+<CategoryPill category={meta.category} />
+</div>
+<div className="activity-right">
+{meta.timeLabel && (
+<span className="time-pill">
+{meta.timeLabel}
+</span>
+)}
+</div>
+</div>
+<span
+className={`status-pill ${done ? "ok" : "miss"}`}
+>
+{done ? "Done" : "Missed"}
+</span>
+</li>
+);
+})}
+</ul>
+</div>
+</>
+)}
+</div>
+</div>
+)}
+</div>
+);
+}
+====================================================================
+// src\main.jsx
+// src/main.jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App.jsx";
+import "./styles.css";
+ReactDOM.createRoot(document.getElementById("root")).render(
+<React.StrictMode>
+<BrowserRouter>
+<App />
+</BrowserRouter>
+</React.StrictMode>
+);
+====================================================================
+// src\MonthView.jsx
+// src/MonthView.jsx
+import React, { useState, useMemo } from "react";
+import { getDailyMeta, getWeeklyMeta } from "./activityConfig";
+import CategoryPill from "./CategoryPill";
+export default function MonthView({ activities, history, customMeta }) {
+const [month, setMonth] = useState(() => {
+const d = new Date();
+return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+});
+// DAYS GRID
+const daysInMonth = useMemo(() => {
+if (!month) return [];
+const [year, monthNum] = month.split("-").map(Number);
+const totalDays = new Date(year, monthNum, 0).getDate();
+return Array.from({ length: totalDays }, (_, i) => {
+const day = i + 1;
+return {
+key: `${year}-${String(monthNum).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
+label: String(day).padStart(2, "0"),
+};
+});
+}, [month]);
+// CELL VALUE
+const getValue = (date, activity) => {
+const entry = history[date];
+if (!entry) return null;
+if (activity.type === "daily")
+return entry.daily?.[activity.name] ? 1 : 0;
+if (activity.type === "weekly")
+return entry.weekly?.[activity.name] ? 1 : 0;
+return null;
+};
+// SEPARATE DAILY + WEEKLY
+const dailyActivities = activities.daily.map((name) => ({
+type: "daily",
+name,
+}));
+const weeklyActivities = activities.weekly.map((w) => ({
+type: "weekly",
+name: w.name,
+}));
+// Table renderer (reusable for both sections)
+const renderTable = (items, type) => (
+<div className="month-grid-wrapper">
+<table className="month-grid">
+<thead>
+<tr>
+<th className="sticky-col">Activity</th>
+{daysInMonth.map((d) => (
+<th key={d.key}>{d.label}</th>
+))}
+</tr>
+</thead>
+<tbody>
+{items.map((act) => {
+const meta =
+type === "daily"
+? getDailyMeta(act.name, customMeta)
+: getWeeklyMeta(act.name);
+return (
+<tr key={act.name}>
+<td className="sticky-col">
+<div className="activity-row">
+<div className="activity-left">{act.name}</div>
+<div className="activity-center">
+<CategoryPill category={meta.category} />
+</div>
+<div className="activity-right">
+{meta.timeLabel && (
+<span className="time-pill tiny">{meta.timeLabel}</span>
+)}
+</div>
+</div>
+</td>
+{daysInMonth.map((d) => {
+const v = getValue(d.key, act);
+return (
+<td key={d.key}>
+<div
+className={
+v === 1
+? "cell-box cell-done"
+: v === 0
+? "cell-box cell-miss"
+: "cell-box cell-empty"
+}
+></div>
+</td>
+);
+})}
+</tr>
+);
+})}
+{items.length === 0 && (
+<tr>
+<td colSpan={daysInMonth.length + 1} className="muted">
+No {type} activities configured.
+</td>
+</tr>
+)}
+</tbody>
+</table>
+</div>
+);
+return (
+<div className="card">
+<h2>Month View</h2>
+{/* Month Picker */}
+<div className="month-picker">
+<label>Select Month:</label>
+<input
+type="month"
+className="input"
+value={month}
+onChange={(e) => setMonth(e.target.value)}
+/>
+</div>
+{/* DAILY SECTION */}
+<div className="detail-block">
+<h4 className="detail-block-title">Daily Activities</h4>
+{renderTable(dailyActivities, "daily")}
+</div>
+{/* WEEKLY SECTION */}
+<div className="detail-block">
+<h4 className="detail-block-title">Weekly Activities</h4>
+{renderTable(weeklyActivities, "weekly")}
+</div>
+</div>
+);
+}
+====================================================================
+// src\Navbar.jsx
+// src/Navbar.jsx
+import React from "react";
+import { NavLink } from "react-router-dom";
+export default function Navbar() {
+return (
+<nav className="top-nav">
+<NavLink
+to="/tracker"
+className={({ isActive }) => (isActive ? "active" : "")}
+>
+Tracker
+</NavLink>
+<NavLink
+to="/todo"
+className={({ isActive }) => (isActive ? "active" : "")}
+>
+ToDo
+</NavLink>
+<NavLink
+to="/dashboard"
+className={({ isActive }) => (isActive ? "active" : "")}
+>
+Dashboard
+</NavLink>
+<NavLink
+to="/month-view"
+className={({ isActive }) => (isActive ? "active" : "")}
+>
+Month View
+</NavLink>
+<NavLink
+to="/setup"
+className={({ isActive }) => (isActive ? "active" : "")}
+>
+Setup
+</NavLink>
+</nav>
+);
+}
+====================================================================
+// src\Setup.jsx
+// src/Setup.jsx
+import React, { useState, useMemo } from "react";
+import {
+CATEGORY_ORDER,
+getDailyMeta,
+DEFAULT_DAILY_SET,
+DEFAULT_WEEKLY_SET,
+} from "./activityConfig";
+import CategoryPill from "./CategoryPill";
+export default function Setup({
+activities,
+setActivities,
+customMeta,
+setCustomMeta,
+}) {
+const [dailyInput, setDailyInput] = useState("");
+const [weeklyInput, setWeeklyInput] = useState("");
+const [selectedDays, setSelectedDays] = useState([]);
+// Edit state
+const [editDaily, setEditDaily] = useState(null);
+const [editDailyName, setEditDailyName] = useState("");
+const [editDailyCategory, setEditDailyCategory] = useState(
+"Other / Custom"
+);
+const [editDailyTime, setEditDailyTime] = useState("");
+const dayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+// -----------------------------------------
+// DAILY: SORT BY TIME ONLY
+// -----------------------------------------
+const sortedDaily = useMemo(() => {
+return [...activities.daily]
+.map((name) => {
+const meta = getDailyMeta(name, customMeta);
+return { name, ...meta };
+})
+.sort((a, b) => a.sortKey.localeCompare(b.sortKey));
+}, [activities.daily, customMeta]);
+// -----------------------------------------
+// DAILY ADD
+// -----------------------------------------
+const addDaily = () => {
+const name = dailyInput.trim();
+if (!name) return;
+if (!activities.daily.includes(name)) {
+setActivities({
+...activities,
+daily: [...activities.daily, name],
+});
+}
+setDailyInput("");
+};
+// -----------------------------------------
+// DAILY EDIT / DELETE
+// -----------------------------------------
+const startEditDaily = (name) => {
+const meta = getDailyMeta(name, customMeta);
+setEditDaily(name);
+setEditDailyName(name);
+setEditDailyCategory(meta.category || "Other / Custom");
+setEditDailyTime(meta.time || "");
+};
+const saveDailyEdit = () => {
+if (!editDaily) return;
+if (!editDailyName.trim()) return;
+const newName = editDailyName.trim();
+setActivities((prev) => ({
+...prev,
+daily: prev.daily.map((d) => (d === editDaily ? newName : d)),
+}));
+setCustomMeta((prev) => {
+const next = { ...prev };
+if (editDaily !== newName) delete next[editDaily];
+next[newName] = {
+category: editDailyCategory,
+time: editDailyTime,
+};
+return next;
+});
+setEditDaily(null);
+setEditDailyName("");
+setEditDailyCategory("Other / Custom");
+setEditDailyTime("");
+};
+const cancelDailyEdit = () => {
+setEditDaily(null);
+setEditDailyName("");
+setEditDailyCategory("Other / Custom");
+setEditDailyTime("");
+};
+const deleteDaily = (name) => {
+setActivities((prev) => ({
+...prev,
+daily: prev.daily.filter((d) => d !== name),
+}));
+setCustomMeta((prev) => {
+const next = { ...prev };
+delete next[name];
+return next;
+});
+};
+// -----------------------------------------
+// WEEKLY ADD / DELETE
+// -----------------------------------------
+const toggleDay = (day) => {
+setSelectedDays((prev) =>
+prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
+);
+};
+const addWeekly = () => {
+const name = weeklyInput.trim();
+if (!name || selectedDays.length === 0) return;
+if (!activities.weekly.some((w) => w.name === name)) {
+setActivities({
+...activities,
+weekly: [...activities.weekly, { name, days: selectedDays }],
+});
+}
+setWeeklyInput("");
+setSelectedDays([]);
+};
+const deleteWeekly = (name) => {
+setActivities((prev) => ({
+...prev,
+weekly: prev.weekly.filter((w) => w.name !== name),
+}));
+};
+// -----------------------------------------
+// RENDER
+// -----------------------------------------
+return (
+<div className="card">
+<h2>Setup Activities</h2>
+{/* DAILY SETUP */}
+<h3>Daily Activities</h3>
+<div className="form-row">
+<input
+className="input"
+value={dailyInput}
+placeholder="Add new daily activity..."
+onChange={(e) => setDailyInput(e.target.value)}
+/>
+<button className="btn" onClick={addDaily}>
+Add
+</button>
+</div>
+{/* SORTED DAILY LIST */}
+<ul className="list small-list" style={{ marginTop: 10 }}>
+{sortedDaily.map((item) => {
+const name = item.name;
+const isDefault = DEFAULT_DAILY_SET.has(name);
+const isEditing = editDaily === name;
+return (
+<li
+key={name}
+style={{
+display: "flex",
+justifyContent: "space-between",
+alignItems: "center",
+gap: "8px",
+padding: "4px 0",
+}}
+>
+{isEditing ? (
+<div
+style={{
+width: "100%",
+display: "flex",
+flexDirection: "column",
+gap: 6,
+}}
+>
+<input
+className="input"
+value={editDailyName}
+onChange={(e) => setEditDailyName(e.target.value)}
+/>
+<div className="form-row">
+<select
+className="input"
+value={editDailyCategory}
+onChange={(e) => setEditDailyCategory(e.target.value)}
+>
+{CATEGORY_ORDER.map((c) => (
+<option key={c} value={c}>
+{c}
+</option>
+))}
+</select>
+<input
+className="input"
+type="time"
+value={editDailyTime}
+onChange={(e) => setEditDailyTime(e.target.value)}
+/>
+</div>
+<div style={{ display: "flex", gap: 6 }}>
+<button className="btn-small" onClick={saveDailyEdit}>
+Save
+</button>
+<button
+className="btn-small ghost"
+onClick={cancelDailyEdit}
+>
+Cancel
+</button>
+</div>
+</div>
+) : (
+<>
+{/* Unified layout: name (left), category (center), time (right) */}
+<div className="activity-row">
+<div className="activity-left">
+<span>{name}</span>
+</div>
+<div className="activity-center">
+<CategoryPill category={item.category} />
+</div>
+<div className="activity-right">
+{item.timeLabel && (
+<span className="time-pill tiny">
+{item.timeLabel}
+</span>
+)}
+</div>
+</div>
+<div style={{ display: "flex", gap: 6 }}>
+<button
+className="icon-btn"
+onClick={() => startEditDaily(name)}
+>
+✎
+</button>
+<button
+className="icon-btn danger"
+onClick={() => deleteDaily(name)}
+>
+✖
+</button>
+</div>
+</>
+)}
+</li>
+);
+})}
+</ul>
+{/* WEEKLY SETUP */}
+<h3 style={{ marginTop: 16 }}>Weekly Activities</h3>
+<input
+className="input"
+value={weeklyInput}
+placeholder="Weekly activity..."
+onChange={(e) => setWeeklyInput(e.target.value)}
+/>
+<div className="days-grid">
+{dayLabels.map((d) => (
+<button
+key={d}
+className={selectedDays.includes(d) ? "day-btn active" : "day-btn"}
+onClick={() => toggleDay(d)}
+>
+{d}
+</button>
+))}
+</div>
+<button className="btn" onClick={addWeekly}>
+Add Weekly Activity
+</button>
+<ul className="list small-list">
+{activities.weekly.map((w) => {
+const isDefault = DEFAULT_WEEKLY_SET.has(w.name);
+return (
+<li
+key={w.name}
+style={{
+display: "flex",
+justifyContent: "space-between",
+alignItems: "center",
+}}
+>
+<span>
+{w.name}{" "}
+<span className="muted">({(w.days || []).join(", ")})</span>
+</span>
+<button
+className="icon-btn danger"
+onClick={() => deleteWeekly(w.name)}
+>
+✖
+</button>
+</li>
+);
+})}
+</ul>
+</div>
+);
+}
+====================================================================
+// src\styles\ToDo.css
+.todo-container {
+max-width: 900px;
+margin: 0 auto;
+padding: 30px 20px;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+min-height: 100vh;
+}
+.todo-container h1 {
+text-align: center;
+color: white;
+margin-bottom: 30px;
+font-size: 2.5em;
+text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+.input-section {
+display: flex;
+gap: 12px;
+margin-bottom: 35px;
+background: white;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.input-section input {
+flex: 1;
+padding: 12px 15px;
+border: 2px solid #e0e0e0;
+border-radius: 6px;
+font-size: 15px;
+transition: border-color 0.3s;
+}
+.input-section input:focus {
+outline: none;
+border-color: #667eea;
+}
+.input-section select {
+padding: 12px 15px;
+border: 2px solid #e0e0e0;
+border-radius: 6px;
+font-size: 15px;
+background-color: white;
+cursor: pointer;
+transition: border-color 0.3s;
+}
+.input-section select:focus {
+outline: none;
+border-color: #667eea;
+}
+.input-section button {
+padding: 12px 25px;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+color: white;
+border: none;
+border-radius: 6px;
+font-size: 15px;
+font-weight: 600;
+cursor: pointer;
+transition: transform 0.2s, box-shadow 0.2s;
+}
+.input-section button:hover {
+transform: translateY(-2px);
+box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+.todos-section {
+display: grid;
+gap: 20px;
+}
+.category-group {
+background: white;
+border-radius: 10px;
+padding: 20px;
+box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.category-group h2 {
+color: #667eea;
+margin: 0 0 15px 0;
+padding-bottom: 12px;
+border-bottom: 3px solid #667eea;
+font-size: 1.3em;
+}
+.category-group ul {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+.category-group li {
+display: flex;
+align-items: center;
+padding: 14px;
+background: #f8f9ff;
+margin-bottom: 10px;
+border-radius: 6px;
+border-left: 4px solid #667eea;
+transition: all 0.3s;
+}
+.category-group li:hover {
+background: #f0f2ff;
+box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+.category-group li input[type="checkbox"] {
+width: 18px;
+height: 18px;
+cursor: pointer;
+margin-right: 12px;
+accent-color: #667eea;
+}
+.category-group li span {
+flex: 1;
+color: #333;
+font-size: 15px;
+font-weight: 500;
+}
+.category-group li.completed span {
+text-decoration: line-through;
+color: #999;
+}
+.category-group li button {
+background-color: #ff4757;
+color: white;
+border: none;
+padding: 8px 15px;
+cursor: pointer;
+border-radius: 4px;
+font-size: 13px;
+font-weight: 600;
+transition: all 0.2s;
+}
+.category-group li button:hover {
+background-color: #ff3838;
+transform: scale(1.05);
+}
+/* Empty state */
+.category-group:has(ul:empty) {
+opacity: 0.6;
+}
+@media (max-width: 600px) {
+.todo-container {
+padding: 15px;
+}
+.input-section {
+flex-direction: column;
+}
+.input-section button {
+width: 100%;
+}
+.category-group li {
+flex-wrap: wrap;
+}
+.category-group li button {
+width: 100%;
+margin-top: 10px;
+}
+}
+/* ...existing code... */
+/* ==========================================================
+TODO PAGE STYLING
+========================================================== */
+.todo-container {
+display: flex;
+flex-direction: column;
+gap: 20px;
+}
+.todo-header {
+margin-bottom: 8px;
+}
+.todo-header h1 {
+margin: 0;
+font-size: 1.9rem;
+background: linear-gradient(90deg, var(--accent-light), var(--accent));
+-webkit-background-clip: text;
+color: transparent;
+}
+/* TODO INPUT SECTION */
+.todo-input-card {
+background: var(--card-bg);
+border: 1px solid var(--border);
+border-radius: 18px;
+padding: 20px;
+box-shadow: var(--shadow-soft);
+backdrop-filter: blur(14px);
+}
+.todo-form {
+display: grid;
+grid-template-columns: 1fr auto auto;
+gap: 10px;
+align-items: flex-end;
+}
+@media (max-width: 768px) {
+.todo-form {
+grid-template-columns: 1fr;
+}
+.todo-form button {
+grid-column: 1 / -1;
+}
+}
+.todo-form input {
+padding: 9px 12px;
+border-radius: 12px;
+border: 1px solid rgba(148, 163, 184, 0.7);
+background: rgba(255, 255, 255, 0.96);
+color: #111827;
+font-size: 0.9rem;
+outline: none;
+transition: border 0.18s ease, box-shadow 0.18s ease;
+}
+.todo-form input:focus {
+border-color: var(--accent);
+box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.4);
+}
+body.theme-dark .todo-form input,
+body.theme-purple .todo-form input {
+background: rgba(15, 23, 42, 0.96);
+color: var(--text);
+border-color: rgba(55, 65, 81, 0.95);
+}
+.todo-form select {
+padding: 9px 12px;
+border-radius: 12px;
+border: 1px solid rgba(148, 163, 184, 0.7);
+background: rgba(255, 255, 255, 0.96);
+color: #111827;
+font-size: 0.9rem;
+outline: none;
+cursor: pointer;
+transition: border 0.18s ease;
+}
+.todo-form select:focus {
+border-color: var(--accent);
+box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.4);
+}
+body.theme-dark .todo-form select,
+body.theme-purple .todo-form select {
+background: rgba(15, 23, 42, 0.96);
+color: var(--text);
+border-color: rgba(55, 65, 81, 0.95);
+}
+.todo-form button {
+padding: 9px 20px;
+border-radius: 12px;
+border: none;
+background: linear-gradient(
+135deg,
+rgba(124, 58, 237, 0.92),
+rgba(168, 85, 247, 0.96)
+);
+color: #f9fafb;
+font-size: 0.9rem;
+font-weight: 600;
+cursor: pointer;
+transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.todo-form button:hover {
+transform: translateY(-1px);
+box-shadow: 0 16px 32px rgba(124, 58, 237, 0.5);
+}
+.todo-form button:active {
+transform: translateY(0);
+box-shadow: 0 8px 18px rgba(124, 58, 237, 0.35);
+}
+/* TODO CATEGORIES GRID */
+.todo-categories {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 18px;
+}
+@media (max-width: 768px) {
+.todo-categories {
+grid-template-columns: 1fr;
+}
+}
+.todo-category-card {
+background: var(--card-bg);
+border: 1px solid var(--border);
+border-radius: 18px;
+padding: 20px;
+box-shadow: var(--shadow-soft);
+backdrop-filter: blur(14px);
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+.todo-category-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 10px;
+}
+.todo-category-title {
+display: flex;
+align-items: center;
+gap: 8px;
+margin: 0;
+font-size: 1.2rem;
+color: var(--accent-light);
+font-weight: 600;
+}
+.todo-category-count {
+background: linear-gradient(
+135deg,
+rgba(124, 58, 237, 0.2),
+rgba(168, 85, 247, 0.2)
+);
+color: var(--accent);
+padding: 3px 8px;
+border-radius: 999px;
+font-size: 0.8rem;
+font-weight: 600;
+border: 1px solid var(--accent);
+}
+body.theme-dark .todo-category-count,
+body.theme-purple .todo-category-count {
+background: rgba(168, 85, 247, 0.15);
+color: var(--accent-light);
+border-color: var(--accent-light);
+}
+/* TODO LIST */
+.todo-list {
+list-style: none;
+padding: 0;
+margin: 0;
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+.todo-item {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 10px 12px;
+background: rgba(255, 255, 255, 0.96);
+border: 1px solid rgba(148, 163, 184, 0.7);
+border-radius: 12px;
+transition: 0.18s ease;
+}
+body.theme-dark .todo-item,
+body.theme-purple .todo-item {
+background: rgba(15, 23, 42, 0.96);
+border-color: rgba(55, 65, 81, 0.95);
+}
+.todo-item:hover {
+border-color: var(--accent);
+box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+}
+.todo-item.completed {
+background: rgba(22, 163, 74, 0.12);
+border-color: rgba(22, 163, 74, 0.4);
+}
+body.theme-dark .todo-item.completed,
+body.theme-purple .todo-item.completed {
+background: rgba(22, 163, 74, 0.18);
+border-color: rgba(74, 222, 128, 0.4);
+}
+/* CHECKBOX */
+.todo-checkbox {
+width: 18px;
+height: 18px;
+cursor: pointer;
+accent-color: var(--accent);
+flex-shrink: 0;
+}
+/* TODO TASK TEXT */
+.todo-task-text {
+flex: 1;
+font-size: 0.95rem;
+color: #0f172a;
+font-weight: 500;
+}
+body.theme-dark .todo-task-text,
+body.theme-purple .todo-task-text {
+color: var(--text);
+}
+.todo-item.completed .todo-task-text {
+text-decoration: line-through;
+color: var(--text-light);
+opacity: 0.7;
+}
+/* DELETE BUTTON */
+.todo-delete-btn {
+width: 32px;
+height: 32px;
+border-radius: 8px;
+border: none;
+background: rgba(248, 113, 113, 0.12);
+color: #dc2626;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1rem;
+transition: 0.18s ease;
+flex-shrink: 0;
+}
+.todo-delete-btn:hover {
+background: rgba(248, 113, 113, 0.25);
+color: #b91c1c;
+}
+body.theme-dark .todo-delete-btn,
+body.theme-purple .todo-delete-btn {
+background: rgba(248, 113, 113, 0.18);
+color: #fb7185;
+}
+body.theme-dark .todo-delete-btn:hover,
+body.theme-purple .todo-delete-btn:hover {
+background: rgba(248, 113, 113, 0.32);
+color: #fecaca;
+}
+/* EMPTY STATE */
+.todo-empty {
+text-align: center;
+padding: 30px 20px;
+color: var(--text-light);
+font-size: 0.95rem;
+}
+.todo-empty-icon {
+font-size: 2.5rem;
+margin-bottom: 10px;
+opacity: 0.6;
+}
+====================================================================
+// src\styles.css
+/* ==========================================================
+GLOBAL BASE — 3 THEME SYSTEM (LIGHT / DARK / PURPLE)
+(Medium Frost — F2)
+========================================================== */
+*,
+*::before,
+*::after {
+box-sizing: border-box;
+}
+html,
+body {
+margin: 0;
+padding: 0;
+font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter",
+"Segoe UI", sans-serif;
+background: var(--bg);
+color: var(--text);
+transition: background 0.3s ease, color 0.3s ease;
+}
+/* -------- Default (Light-ish) variables -------- */
+:root {
+--bg: #f5f3ff;
+--bg-gradient: radial-gradient(circle at top left, #e9d5ff, #f5f3ff 55%);
+--card-bg: rgba(255, 255, 255, 0.75);
+--border: rgba(148, 163, 184, 0.6);
+--text: #0f172a;
+--text-light: #6b7280;
+--accent: #7c3aed;
+--accent-light: #a855f7;
+--danger: #dc2626;
+--shadow-soft: 0 14px 36px rgba(148, 163, 184, 0.4);
+}
+/* -------- LIGHT THEME -------- */
+body.theme-light {
+--bg: #f5f3ff;
+--bg-gradient: radial-gradient(circle at top left, #ede9fe, #f5f3ff 55%);
+--card-bg: rgba(255, 255, 255, 0.8);
+--border: rgba(148, 163, 184, 0.65);
+--text: #0f172a;
+--text-light: #6b7280;
+--accent: #7c3aed;
+--accent-light: #8b5cf6;
+--danger: #b91c1c;
+--shadow-soft: 0 16px 40px rgba(148, 163, 184, 0.4);
+}
+/* -------- DARK THEME -------- */
+body.theme-dark {
+--bg: #030712;
+--bg-gradient: radial-gradient(circle at top left, #111827, #020617 55%);
+--card-bg: rgba(15, 23, 42, 0.78);
+--border: rgba(51, 65, 85, 0.9);
+--text: #e5e7eb;
+--text-light: #9ca3af;
+--accent: #8b5cf6;
+--accent-light: #a855f7;
+--danger: #ef4444;
+--shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.95);
+}
+/* -------- BOLD PURPLE THEME (DEFAULT) -------- */
+body.theme-purple {
+--bg: #1c022d;
+--bg-gradient: radial-gradient(circle at top left, #4c1d95, #1c022d 55%);
+--card-bg: rgba(17, 12, 40, 0.78);
+--border: rgba(168, 85, 247, 0.6);
+--text: #f9fafb;
+--text-light: #c4b5fd;
+--accent: #a855f7;
+--accent-light: #c4b5fd;
+--danger: #fb7185;
+--shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.95);
+}
+/* ==========================================================
+BACKGROUND + APP SHELL
+========================================================== */
+body {
+min-height: 100vh;
+background: var(--bg-gradient);
+}
+.app-shell {
+max-width: 1100px;
+margin: 0 auto;
+padding: 20px 16px 40px;
+}
+/* GRID LAYOUT FOR PAGES */
+.layout {
+display: grid;
+gap: 20px;
+margin-top: 15px;
+}
+@media (min-width: 900px) {
+.layout {
+grid-template-columns: 1fr;
+}
+}
+/* ==========================================================
+HEADER
+========================================================== */
+.app-header {
+padding-bottom: 12px;
+border-bottom: 1px solid var(--border);
+margin-bottom: 16px;
+}
+.header-top {
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+gap: 16px;
+}
+.app-header h1 {
+font-size: 1.9rem;
+margin: 0;
+font-weight: 700;
+background: linear-gradient(90deg, var(--accent-light), var(--accent));
+-webkit-background-clip: text;
+color: transparent;
+}
+.muted {
+color: var(--text-light);
+font-size: 0.88rem;
+}
+.header-right {
+display: flex;
+gap: 8px;
+align-items: center;
+flex-wrap: wrap;
+}
+/* ==========================================================
+BUTTONS
+========================================================== */
+button,
+.btn {
+cursor: pointer;
+border: none;
+border-radius: 999px;
+padding: 9px 16px;
+font-size: 0.9rem;
+background: linear-gradient(
+135deg,
+rgba(124, 58, 237, 0.92),
+rgba(168, 85, 247, 0.96)
+);
+color: #f9fafb;
+/* box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4); */
+transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.15s ease;
+}
+button:hover,
+.btn:hover {
+transform: translateY(-1px);
+box-shadow: 0 16px 32px rgba(124, 58, 237, 0.5);
+}
+button:active,
+.btn:active {
+transform: translateY(0);
+box-shadow: 0 8px 18px rgba(124, 58, 237, 0.35);
+}
+.btn-small {
+padding: 6px 12px;
+font-size: 0.78rem;
+}
+/* ghost button (theme toggle) */
+.btn-small.ghost {
+background: none;
+color: var(--text-light);
+border: 1px solid var(--border);
+box-shadow: none;
+}
+.btn-small.ghost:hover {
+background: rgba(148, 163, 184, 0.12);
+color: var(--text);
+}
+/* file import button */
+.import-btn {
+background: rgba(255, 255, 255, 0.08);
+color: var(--text);
+border: 1px solid rgba(148, 163, 184, 0.6);
+box-shadow: none;
+}
+.import-btn:hover {
+background: rgba(255, 255, 255, 0.16);
+}
+/* icon buttons (prev/next etc.) */
+.icon-btn {
+width: 36px;
+height: 36px;
+border-radius: 999px;
+padding: 0;
+background: rgba(255, 255, 255, 0.04);
+border: 1px solid var(--border);
+display: flex;
+align-items: center;
+justify-content: center;
+box-shadow: none;
+color: var(--text);
+}
+.icon-btn:hover {
+background: rgba(148, 163, 184, 0.18);
+}
+/* danger icon button (delete etc.) */
+.icon-btn.danger {
+background: rgba(248, 113, 113, 0.12);
+border-color: rgba(248, 113, 113, 0.7);
+}
+.icon-btn.danger:hover {
+background: rgba(239, 68, 68, 0.2);
+}
+/* ==========================================================
+TOP NAV TABS (Router NavLink)
+========================================================== */
+.top-nav {
+display: inline-flex;
+gap: 6px;
+background: rgba(15, 23, 42, 0.08);
+padding: 4px;
+border-radius: 999px;
+margin-top: 12px;
+border: 1px solid rgba(148, 163, 184, 0.45);
+}
+/* NavLink outputs <a> */
+.top-nav a {
+text-decoration: none;
+background: transparent;
+color: var(--text-light);
+padding: 6px 16px;
+border-radius: 999px;
+box-shadow: none;
+font-size: 0.88rem;
+border: 1px solid transparent;
+}
+.top-nav a:hover {
+background: rgba(148, 163, 184, 0.12);
+}
+/* Active tab */
+.top-nav .active {
+background: #ffffff;
+color: #111827;
+border-color: rgba(148, 163, 184, 0.6);
+box-shadow: 0 10px 22px rgba(15, 23, 42, 0.25);
+}
+/* dark/purple adjust active tab */
+body.theme-dark .top-nav {
+background: rgba(15, 23, 42, 0.7);
+}
+body.theme-purple .top-nav {
+background: rgba(15, 23, 42, 0.7);
+}
+body.theme-dark .top-nav .active,
+body.theme-purple .top-nav .active {
+background: var(--accent);
+color: #f9fafb;
+border-color: rgba(248, 250, 252, 0.6);
+box-shadow: 0 12px 26px rgba(88, 28, 135, 0.7);
+}
+/* ==========================================================
+CARD STYLING
+========================================================== */
+.card {
+background: var(--card-bg);
+border: 1px solid var(--border);
+border-radius: 18px;
+padding: 20px 20px 22px;
+box-shadow: var(--shadow-soft);
+backdrop-filter: blur(14px);
+}
+.card h2 {
+margin-top: 0;
+font-size: 1.35rem;
+margin-bottom: 8px;
+color: var(--accent-light);
+}
+.card h3 {
+font-size: 1.05rem;
+margin-bottom: 6px;
+}
+.card-header-row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 8px;
+}
+/* ==========================================================
+INPUTS
+========================================================== */
+.input {
+width: 100%;
+padding: 9px 12px;
+border-radius: 12px;
+border: 1px solid rgba(148, 163, 184, 0.7);
+background: rgba(255, 255, 255, 0.96);
+color: #111827;
+font-size: 0.9rem;
+outline: none;
+transition: border 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+.input:focus {
+border-color: var(--accent);
+box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.4);
+}
+body.theme-dark .input,
+body.theme-purple .input {
+background: rgba(15, 23, 42, 0.96);
+color: var(--text);
+border-color: rgba(55, 65, 81, 0.95);
+}
+/* ==========================================================
+LISTS & SIMPLE ROWS (Setup, ActivityList, etc.)
+========================================================== */
+.list {
+list-style: none !important;
+padding-left: 0 !important;
+margin: 10px 0;
+}
+.list li {
+padding: 6px 0;
+border-bottom: 1px solid var(--border);
+font-size: 0.9rem;
+color: var(--text-light);
+}
+.list li:last-child {
+border-bottom: none;
+}
+.small-list li {
+font-size: 0.9rem;
+}
+.item-row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 8px;
+padding: 6px 10px;
+border-radius: 10px;
+border: 1px solid var(--border);
+}
+/* ==========================================================
+CHECKBOX ROWS (Tracker) + ANIMATIONS
+========================================================== */
+.check-row {
+display: flex;
+align-items: center;
+gap: 10px;
+background: rgba(255, 255, 255, 0.96);
+border: 1px solid rgba(148, 163, 184, 0.75);
+border-radius: 12px;
+padding: 8px 10px;
+margin-bottom: 6px;
+transition: 0.18s ease;
+}
+.check-row:hover {
+border-color: var(--accent);
+}
+body.theme-dark .check-row,
+body.theme-purple .check-row {
+background: rgba(15, 23, 42, 0.96);
+border-color: rgba(55, 65, 81, 0.95);
+}
+/* animated highlight when checked */
+.check-row.checked {
+background: rgba(129, 140, 248, 0.16);
+border-color: var(--accent);
+animation: checkHighlight 0.25s ease-out;
+}
+/* hidden technical checkbox */
+.check-hidden {
+position: absolute;
+opacity: 0;
+width: 0;
+height: 0;
+pointer-events: none;
+}
+/* label text */
+.check-row span {
+font-size: 0.95rem;
+}
+/* Completed task = green pill */
+.done-text {
+background: linear-gradient(135deg, #16a34a, #22c55e);
+color: #f0fdf4;
+padding: 4px 10px;
+border-radius: 999px;
+font-weight: 500;
+display: inline-block;
+animation: doneFadeIn 0.25s ease-out;
+}
+/* Incomplete task = red pill */
+.miss-text {
+background: linear-gradient(135deg, #b91c1c, #ef4444);
+color: #fef2f2;
+padding: 4px 10px;
+border-radius: 999px;
+font-weight: 500;
+display: inline-block;
+}
+/* ==========================================================
+DAY BUTTONS (WEEKLY SETUP)
+========================================================== */
+.days-grid {
+display: flex;
+gap: 8px;
+flex-wrap: wrap;
+margin: 10px 0;
+}
+.day-btn {
+padding: 6px 10px;
+border-radius: 999px;
+border: 1px solid rgba(148, 163, 184, 0.7);
+background: rgba(255, 255, 255, 0.98);
+color: #111827;
+font-size: 0.8rem;
+}
+.day-btn:hover {
+border-color: var(--accent);
+}
+.day-btn.active {
+background: linear-gradient(135deg, var(--accent), var(--accent-light));
+color: #f9fafb;
+border-color: transparent;
+box-shadow: 0 8px 18px rgba(124, 58, 237, 0.6);
+}
+body.theme-dark .day-btn,
+body.theme-purple .day-btn {
+background: rgba(15, 23, 42, 0.98);
+color: var(--text);
+border-color: rgba(55, 65, 81, 0.9);
+}
+/* ==========================================================
+DATE CONTROLS (TRACKER)
+========================================================== */
+.date-controls {
+display: grid;
+grid-template-columns: auto 1fr auto;
+align-items: center;
+gap: 12px;
+margin-bottom: 14px;
+}
+.date-center {
+display: flex;
+flex-direction: column;
+gap: 4px;
+}
+.date-input-row {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.date-controls input[type="date"] {
+padding: 6px 8px;
+font-size: 0.85rem;
+border-radius: 10px;
+border: 1px solid rgba(148, 163, 184, 0.8);
+background: rgba(255, 255, 255, 0.98);
+color: #111827;
+}
+body.theme-dark .date-controls input[type="date"],
+body.theme-purple .date-controls input[type="date"] {
+background: rgba(15, 23, 42, 0.98);
+color: var(--text);
+border-color: rgba(55, 65, 81, 0.95);
+}
+.today-btn {
+padding: 5px 12px;
+font-size: 0.8rem;
+background: linear-gradient(135deg, #16a34a, #22c55e);
+border-radius: 999px;
+border: none;
+}
+/* tracker stats pills */
+.tracker-stats {
+display: flex;
+gap: 6px;
+flex-wrap: wrap;
+}
+.pill {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+padding: 3px 8px;
+border-radius: 999px;
+font-size: 0.8rem;
+border: 1px solid rgba(148, 163, 184, 0.7);
+background: rgba(226, 232, 240, 0.85);
+color: #111827;
+}
+.pill.tiny {
+font-size: 0.75rem;
+padding: 2px 6px;
+}
+body.theme-dark .pill,
+body.theme-purple .pill {
+background: rgba(15, 23, 42, 0.95);
+color: var(--text-light);
+}
+/* ==========================================================
+DASHBOARD LAYOUT
+========================================================== */
+.dashboard {
+display: grid;
+grid-template-columns: 0.6fr 1.4fr;
+gap: 20px;
+}
+@media (max-width: 768px) {
+.dashboard {
+grid-template-columns: 1fr;
+}
+.date-list {
+max-height: 220px;
+border-right: none;
+border-bottom: 1px solid var(--border);
+padding-bottom: 8px;
+margin-bottom: 10px;
+}
+.header-top {
+flex-direction: column;
+}
+}
+/* Dashboard header with radial progress */
+.dashboard-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 14px;
+gap: 12px;
+}
+/* DATE LIST COLUMN */
+.date-list {
+max-height: 450px;
+overflow-y: auto;
+padding-right: 6px;
+display: flex;
+flex-direction: column;
+gap: 8px;
+border-right: 1px solid var(--border);
+}
+/* nicer scroll */
+.date-list::-webkit-scrollbar {
+width: 6px;
+}
+.date-list::-webkit-scrollbar-track {
+background: transparent;
+}
+.date-list::-webkit-scrollbar-thumb {
+background: rgba(148, 163, 184, 0.7);
+border-radius: 999px;
+}
+.date-list-btn {
+width: 100%;
+text-align: left;
+background: rgba(255, 255, 255, 0.98);
+border: 1px solid rgba(148, 163, 184, 0.8);
+border-radius: 14px;
+padding: 8px 10px;
+transition: 0.18s ease;
+display: flex;
+flex-direction: column;
+gap: 4px;
+color: #111827;
+}
+body.theme-dark .date-list-btn,
+body.theme-purple .date-list-btn {
+background: rgba(15, 23, 42, 0.98);
+border-color: rgba(55, 65, 81, 0.95);
+color: var(--text);
+}
+.date-list-btn:hover {
+border-color: var(--accent);
+transform: translateY(-1px);
+}
+.date-list .selected {
+background: linear-gradient(135deg, var(--accent), var(--accent-light));
+color: #f9fafb;
+border-color: transparent;
+box-shadow: 0 12px 26px rgba(88, 28, 135, 0.7);
+}
+.date-main-line {
+font-size: 0.9rem;
+font-weight: 600;
+}
+.date-sub-line {
+display: flex;
+gap: 6px;
+margin-top: 2px;
+}
+/* DETAILS PANEL */
+.details h3 {
+margin-top: 0;
+}
+.detail-date {
+margin-bottom: 6px;
+}
+.details ul {
+list-style: none;
+padding-left: 0;
+margin: 0;
+}
+.detail-section {
+margin-bottom: 14px;
+}
+.detail-section-title {
+margin: 8px 0 6px;
+font-size: 0.98rem;
+font-weight: 600;
+}
+.detail-section-list {
+border-radius: 12px;
+padding: 6px 0;
+}
+.details li {
+padding: 3px 0;
+font-size: 0.95rem;
+}
+.detail-row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 10px;
+}
+/* status pills in dashboard */
+.status-pill {
+padding: 2px 8px;
+border-radius: 999px;
+font-size: 0.75rem;
+font-weight: 500;
+}
+.status-pill.ok {
+background: rgba(22, 163, 74, 0.18);
+color: #15803d;
+}
+.status-pill.miss {
+background: rgba(239, 68, 68, 0.18);
+color: #b91c1c;
+}
+body.theme-dark .status-pill.ok,
+body.theme-purple .status-pill.ok {
+background: rgba(22, 163, 74, 0.25);
+color: #bbf7d0;
+}
+body.theme-dark .status-pill.miss,
+body.theme-purple .status-pill.miss {
+background: rgba(248, 113, 113, 0.25);
+color: #fecaca;
+}
+/* ==========================================================
+PROGRESS CIRCLE (with smooth animation)
+========================================================== */
+.progress-circle {
+--progress: 0; /* 0–100 */
+width: 90px;
+height: 90px;
+border-radius: 50%;
+background: conic-gradient(
+var(--accent-light) calc(var(--progress) * 1%),
+rgba(148, 163, 184, 0.3) 0
+);
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative;
+box-shadow: 0 12px 30px rgba(88, 28, 135, 0.45);
+transition: background 0.4s ease-out, box-shadow 0.3s ease-out,
+transform 0.3s ease-out;
+}
+.progress-circle::before {
+content: "";
+position: absolute;
+inset: 9px;
+border-radius: 50%;
+background: var(--card-bg);
+box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.5);
+}
+.progress-circle span {
+position: relative;
+font-size: 0.85rem;
+font-weight: 600;
+color: var(--accent);
+}
+body.theme-dark .progress-circle span,
+body.theme-purple .progress-circle span {
+color: var(--accent-light);
+}
+.progress-circle:hover {
+transform: translateY(-1px) scale(1.02);
+}
+/* ==========================================================
+MONTH VIEW GRID — COMPACT + COLOR BOXES
+========================================================== */
+.month-picker {
+margin-bottom: 12px;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.month-picker label {
+font-size: 0.85rem;
+color: var(--text-light);
+}
+.month-grid-wrapper {
+overflow-x: auto;
+border-radius: 10px;
+border: 1px solid var(--border);
+background: rgba(15, 23, 42, 0.02);
+}
+.month-grid {
+width: max-content;
+border-collapse: collapse;
+min-width: 100%;
+}
+.month-grid th,
+.month-grid td {
+padding: 4px 6px;
+border: 1px solid var(--border);
+text-align: center;
+font-size: 0.75rem;
+white-space: nowrap;
+}
+.month-grid th {
+background: var(--card-bg);
+font-weight: 600;
+position: sticky;
+top: 0;
+z-index: 3;
+}
+.sticky-col {
+position: sticky;
+left: 0;
+background: var(--card-bg);
+z-index: 4;
+}
+/* box indicator in each cell */
+.month-grid .cell-box {
+width: 18px;
+height: 18px;
+border-radius: 4px;
+margin: auto;
+}
+/* Completed = green box */
+.cell-done {
+background: #22c55e;
+}
+/* Missed = red box */
+.cell-miss {
+background: #ef4444;
+}
+/* No data = faint grey box */
+.cell-empty {
+background: rgba(148, 163, 184, 0.28);
+}
+/* Dark/Purple variants */
+body.theme-dark .cell-empty,
+body.theme-purple .cell-empty {
+background: rgba(148, 163, 184, 0.42);
+}
+body.theme-dark .cell-done,
+body.theme-purple .cell-done {
+background: #4ade80;
+}
+body.theme-dark .cell-miss,
+body.theme-purple .cell-miss {
+background: #fca5a5;
+}
+/* ==========================================================
+FORMS
+========================================================== */
+.form-row {
+display: flex;
+gap: 10px;
+margin-bottom: 8px;
+}
+.form {
+display: flex;
+gap: 8px;
+}
+/* ==========================================================
+ANIMATIONS
+========================================================== */
+@keyframes checkHighlight {
+from {
+transform: scale(0.97);
+background-color: rgba(129, 140, 248, 0.04);
+}
+to {
+transform: scale(1);
+background-color: rgba(129, 140, 248, 0.16);
+}
+}
+@keyframes doneFadeIn {
+from {
+opacity: 0;
+transform: translateY(2px) scale(0.97);
+}
+to {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+}
+.cat-pill {
+display: inline-block;
+padding: 2px 6px;
+font-size: 0.65rem;
+border-radius: 6px;
+color: white;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.03em;
+opacity: 0.85;
+}
+.track-row-title,
+.detail-title-row,
+.month-name-cell {
+display: flex;
+align-items: center;
+gap: 6px;
+}
+/* =========================================
+CATEGORY PILL + TITLE ROWS
+========================================= */
+.cat-pill {
+display: inline-flex;
+align-items: center;
+gap: 3px;
+padding: 2px 6px;
+border-radius: 999px;
+font-size: 0.65rem;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.03em;
+color: #f9fafb;
+opacity: 0.9;
+}
+.cat-pill-icon {
+font-size: 0.7rem;
+}
+.cat-pill-text {
+white-space: nowrap;
+}
+.setup-row-main,
+.track-row-title,
+.detail-title-row,
+.month-name-cell {
+display: flex;
+align-items: center;
+gap: 6px;
+}
+/* =========================================
+TRACKER ROW LAYOUT (time on right)
+========================================= */
+.check-row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.check-main {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+/* time pill (used in tracker, dashboard, month view) */
+.time-pill {
+padding: 3px 8px;
+border-radius: 999px;
+font-size: 0.75rem;
+font-weight: 500;
+background: rgba(148, 163, 184, 0.22);
+color: #0f172a;
+white-space: nowrap;
+}
+.time-pill.tiny {
+font-size: 0.7rem;
+padding: 2px 6px;
+}
+body.theme-dark .time-pill,
+body.theme-purple .time-pill {
+background: rgba(15, 23, 42, 0.9);
+color: var(--text-light);
+}
+/* =========================================
+DASHBOARD DETAIL ROW RIGHT SIDE
+========================================= */
+.detail-right {
+display: flex;
+align-items: center;
+gap: 6px;
+}
+/* =========================================
+MONTH VIEW CELL BOXES (already used)
+(In case missing)
+========================================= */
+.month-grid-wrapper {
+margin-top: 10px;
+overflow: auto;
+}
+.month-grid {
+width: 100%;
+border-collapse: collapse;
+font-size: 0.78rem;
+}
+.month-grid th,
+.month-grid td {
+border: 1px solid var(--border);
+padding: 4px;
+text-align: center;
+}
+.sticky-col {
+position: sticky;
+left: 0;
+background: var(--card-bg);
+z-index: 1;
+text-align: left;
+}
+.cell-box {
+width: 16px;
+height: 16px;
+border-radius: 4px;
+margin: 0 auto;
+}
+.cell-done {
+background: linear-gradient(135deg, #16a34a, #22c55e);
+}
+.cell-miss {
+background: linear-gradient(135deg, #b91c1c, #ef4444);
+}
+.cell-empty {
+background: transparent;
+}
+.activity-row {
+display: flex;
+align-items: center;
+width: 100%;
+gap: 10px;
+}
+.activity-left {
+flex: 1;
+text-align: left;
+display: flex;
+align-items: center;
+gap: 6px;
+}
+.activity-center {
+flex: 0 0 160px; /* fixed width section for category pill */
+display: flex;
+justify-content: center;
+}
+.activity-right {
+flex: 0 0 80px;
+text-align: right;
+}
+/* Improve time pill alignment */
+.time-pill {
+font-size: 0.78rem;
+padding: 3px 6px;
+border-radius: 6px;
+opacity: 0.9;
+}
+.tiny.time-pill {
+font-size: 0.7rem;
+padding: 2px 5px;
+}
+/* =========================================
+CLEAN SEPARATION OF DAILY / WEEKLY BLOCKS
+========================================= */
+.detail-block {
+margin-bottom: 22px;
+padding-bottom: 10px;
+border-bottom: 1px solid var(--border);
+}
+.detail-block:last-child {
+border-bottom: none;
+}
+.detail-block-title {
+font-size: 1rem;
+font-weight: 600;
+margin: 0 0 8px 0;
+padding-left: 2px;
+color: var(--accent-light);
+}
+.detail-block-list {
+list-style: none;
+padding-left: 0;
+margin: 0;
+}
+.detail-block-list li {
+padding: 6px 0;
+}
+====================================================================
+// src\ToDo.jsx
+import React, { useState, useEffect } from 'react';
+import './styles/ToDo.css';
+const STORAGE_KEY = 'personal-tracker-todos';
+const CATEGORIES = ['Learning', 'Notes', 'Doubt', 'Work', 'Personal'];
+export default function TodoPage() {
+const [todos, setTodos] = useState([]);
+const [taskInput, setTaskInput] = useState('');
+const [categoryInput, setCategoryInput] = useState('Learning');
+const [isLoaded, setIsLoaded] = useState(false);
+// Load from localStorage on mount
+useEffect(() => {
+const loadTodos = () => {
+try {
+const stored = localStorage.getItem(STORAGE_KEY);
+console.log('📦 Loading from localStorage:', stored);
+if (stored) {
+const parsed = JSON.parse(stored);
+setTodos(parsed);
+console.log('✅ Loaded todos:', parsed);
+}
+} catch (error) {
+console.error('❌ Error loading todos:', error);
+} finally {
+setIsLoaded(true);
+}
+};
+
+loadTodos();
+}, []);
+// Save to localStorage whenever todos change
+useEffect(() => {
+if (isLoaded) {
+try {
+localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+console.log('💾 Saved to localStorage:', todos);
+} catch (error) {
+console.error('❌ Error saving todos:', error);
+}
+}
+}, [todos, isLoaded]);
+const addTodo = () => {
+if (taskInput.trim()) {
+const newTodo = {
+id: Date.now(),
+task: taskInput,
+category: categoryInput,
+completed: false,
+createdAt: new Date().toISOString()
+};
+console.log('➕ Adding new todo:', newTodo);
+setTodos(prevTodos => [...prevTodos, newTodo]);
+setTaskInput('');
+}
+};
+const deleteTodo = (id) => {
+console.log('🗑️ Deleting todo with id:', id);
+setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+};
+const toggleComplete = (id) => {
+console.log('✔️ Toggling todo with id:', id);
+setTodos(prevTodos =>
+prevTodos.map(todo =>
+todo.id === id ? { ...todo, completed: !todo.completed } : todo
+)
+);
+};
+const groupedTodos = CATEGORIES.reduce((acc, cat) => {
+acc[cat] = todos.filter(t => t.category === cat);
+return acc;
+}, {});
+return (
+<div className="app-shell">
+<div className="app-header">
+<h1>📝 My ToDo List</h1>
+<p className="muted">Total tasks: {todos.length}</p>
+</div>
+<div className="todo-container">
+{/* INPUT SECTION */}
+<div className="todo-input-card">
+<form className="todo-form" onSubmit={(e) => { e.preventDefault(); addTodo(); }}>
+<input
+type="text"
+placeholder="Add new task..."
+value={taskInput}
+onChange={(e) => setTaskInput(e.target.value)}
+onKeyPress={(e) => e.key === 'Enter' && addTodo()}
+/>
+<select
+value={categoryInput}
+onChange={(e) => setCategoryInput(e.target.value)}
+>
+{CATEGORIES.map(cat => (
+<option key={cat} value={cat}>{cat}</option>
+))}
+</select>
+<button type="submit">
+Add Task
+</button>
+</form>
+</div>
+{/* CATEGORIES GRID */}
+<div className="todo-categories">
+{CATEGORIES.map(category => {
+const items = groupedTodos[category];
+return (
+<div key={category} className="todo-category-card">
+<div className="todo-category-header">
+<h2 className="todo-category-title">
+{getCategoryIcon(category)} {category}
+</h2>
+<span className="todo-category-count">{items.length}</span>
+</div>
+{items.length === 0 ? (
+<div className="todo-empty">
+<div className="todo-empty-icon">📭</div>
+No tasks yet
+</div>
+) : (
+<ul className="todo-list">
+{items.map(todo => (
+<li
+key={todo.id}
+className={`todo-item ${todo.completed ? 'completed' : ''}`}
+>
+<input
+type="checkbox"
+className="todo-checkbox"
+checked={todo.completed}
+onChange={() => toggleComplete(todo.id)}
+/>
+<span className="todo-task-text">{todo.task}</span>
+<button
+type="button"
+className="todo-delete-btn"
+onClick={() => deleteTodo(todo.id)}
+title="Delete task"
+>
+✕
+</button>
+</li>
+))}
+</ul>
+)}
+</div>
+);
+})}
+</div>
+</div>
+</div>
+);
+}
+function getCategoryIcon(category) {
+const icons = {
+'Learning': '📚',
+'Notes': '📄',
+'Doubt': '❓',
+'Work': '💼',
+'Personal': '👤'
+};
+return icons[category] || '📌';
+}
+====================================================================
+// src\Tracker.jsx
+// src/Tracker.jsx
+import React from "react";
+import { getDailyMeta, getWeeklyMeta } from "./activityConfig";
+import CategoryPill from "./CategoryPill";
+export default function Tracker({
+activities,
+history,
+currentDate,
+setCurrentDate,
+updateDayStatus,
+customMeta,
+}) {
+const dayName = new Date(currentDate).toLocaleDateString("en-US", {
+weekday: "short",
+});
+const daily = history[currentDate]?.daily || {};
+const weekly = history[currentDate]?.weekly || {};
+const goToday = () => {
+// setCurrentDate(new Date().toISOString().split("T")[0]);
+setCurrentDate(new Date().toLocaleDateString("en-CA"));
+console.log("goToday clicked", currentDate);
+};
+const goPrev = () => {
+const d = new Date(currentDate);
+d.setDate(d.getDate() - 1);
+setCurrentDate(d.toISOString().split("T")[0]);
+};
+const goNext = () => {
+const d = new Date(currentDate);
+d.setDate(d.getDate() + 1);
+setCurrentDate(d.toISOString().split("T")[0]);
+};
+const todaysWeekly = activities.weekly.filter((w) =>
+w.days.includes(dayName)
+);
+const dailyTotal = activities.daily.length;
+const weeklyTotal = todaysWeekly.length;
+const dailyDoneCount = activities.daily.filter((n) => daily[n]).length;
+const weeklyDoneCount = todaysWeekly.filter((w) => weekly[w.name]).length;
+return (
+<div className="card">
+<h2>Tracker</h2>
+{/* DATE CONTROLS */}
+<div className="date-controls">
+<button className="icon-btn" onClick={goPrev}>
+◀
+</button>
+<div className="date-center">
+<div className="date-input-row">
+<input
+type="date"
+value={currentDate}
+onChange={(e) => setCurrentDate(e.target.value)}
+/>
+<button className="today-btn" onClick={goToday}>
+Today
+</button>
+</div>
+<div className="tracker-stats">
+<span className="pill tiny">
+D: {dailyDoneCount}/{dailyTotal}
+</span>
+<span className="pill tiny">
+W: {weeklyDoneCount}/{weeklyTotal}
+</span>
+</div>
+</div>
+<button className="icon-btn" onClick={goNext}>
+▶
+</button>
+</div>
+{/* DAILY ACTIVITIES */}
+<h3>Daily Activities</h3>
+{activities.daily.map((name) => {
+const done = !!daily[name];
+const meta = getDailyMeta(name, customMeta);
+return (
+<label
+key={name}
+className={`check-row ${done ? "checked" : ""}`}
+>
+<div className="activity-row">
+{/* LEFT: checkbox + name */}
+<div className="activity-left">
+<input
+type="checkbox"
+className="check-hidden"
+checked={done}
+onChange={(e) =>
+updateDayStatus("daily", name, e.target.checked)
+}
+/>
+<span className={done ? "done-text" : "miss-text"}>
+{name}
+</span>
+</div>
+{/* CENTER: category pill */}
+<div className="activity-center">
+<CategoryPill category={meta.category} />
+</div>
+{/* RIGHT: time */}
+<div className="activity-right">
+{meta.timeLabel && (
+<span className="time-pill">{meta.timeLabel}</span>
+)}
+</div>
+</div>
+</label>
+);
+})}
+{/* WEEKLY ACTIVITIES */}
+<h3>Weekly ({dayName})</h3>
+{todaysWeekly.length === 0 && (
+<p className="muted">No weekly activities scheduled for {dayName}.</p>
+)}
+{todaysWeekly.map((w) => {
+const done = !!weekly[w.name];
+const meta = getWeeklyMeta(w.name);
+return (
+<label
+key={w.name}
+className={`check-row ${done ? "checked" : ""}`}
+>
+<div className="activity-row">
+{/* LEFT: checkbox + name */}
+<div className="activity-left">
+<input
+type="checkbox"
+className="check-hidden"
+checked={done}
+onChange={(e) =>
+updateDayStatus("weekly", w.name, e.target.checked)
+}
+/>
+<span className={done ? "done-text" : "miss-text"}>
+{w.name}
+</span>
+</div>
+{/* CENTER: category pill */}
+<div className="activity-center">
+<CategoryPill category={meta.category} />
+</div>
+{/* RIGHT: (weekly usually has no time, but kept for consistency) */}
+<div className="activity-right">
+{meta.timeLabel && (
+<span className="time-pill">{meta.timeLabel}</span>
+)}
+</div>
+</div>
+</label>
+);
+})}
+</div>
+);
+}
+====================================================================
+// vercel.json
+{
+"rewrites": [
+{
+"source": "/(.*)",
+"destination": "/index.html"
+}
+]
+}
+====================================================================
+// vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+// https://vite.dev/config/
+export default defineConfig({
+plugins: [react()],
+})
+====================================================================
