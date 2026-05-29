@@ -17,7 +17,7 @@ console.log("Root DIR :: ", ROOT_DIR);
 const Combined_Path = ROOT_DIR + `\\utils\\MergeCodeFile`;
 console.log("Combined DIR :: ", Combined_Path);
 
-const OUTPUT_FILE = path.join(ROOT_DIR, "Learning Management Complete Code.txt");
+const OUTPUT_FILE = path.join(ROOT_DIR, "Daily Tracker Complete Code.txt");
 const IGNORE_FILE = path.join(Combined_Path, "merge-ignore.txt");
 
 const ig = ignore();
