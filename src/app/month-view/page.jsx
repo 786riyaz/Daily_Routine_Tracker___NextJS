@@ -75,7 +75,7 @@ export default function MonthViewPage() {
                 <thead>
                   <tr>
                     <th className="sticky-col mv-name-col">Activity</th>
-                    {dayNums.map(d => <th key={d} className="mv-day-col">{String(d).padStart(2,'0')}</th>)}
+                    {dayNums.map(d => <th key={d} className="mv-day-col"><span className="mv-day-header">{String(d).padStart(2,'0')}</span></th>)}
                   </tr>
                 </thead>
                 <tbody>
@@ -112,7 +112,7 @@ export default function MonthViewPage() {
                 <thead>
                   <tr>
                     <th className="sticky-col mv-name-col">Activity</th>
-                    {dayNums.map(d => <th key={d} className="mv-day-col">{String(d).padStart(2,'0')}</th>)}
+                    {dayNums.map(d => <th key={d} className="mv-day-col"><span className="mv-day-header">{String(d).padStart(2,'0')}</span></th>)}
                   </tr>
                 </thead>
                 <tbody>

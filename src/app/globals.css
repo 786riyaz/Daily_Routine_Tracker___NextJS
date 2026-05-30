@@ -214,8 +214,20 @@ button:active, .btn:active { transform: translateY(0); box-shadow: 0 8px 18px rg
 .month-grid-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); background: rgba(15,23,42,0.02); margin-top: 10px; overflow: auto; }
 .month-grid { width: max-content; border-collapse: collapse; min-width: 100%; font-size: 0.78rem; }
 .month-grid th, .month-grid td { padding: 4px 6px; border: 1px solid var(--border); text-align: center; font-size: 0.75rem; white-space: nowrap; }
-.month-grid th { background: var(--card-bg); font-weight: 600; position: sticky; top: 0; z-index: 3; }
+.month-grid th {
+  background: var(--card-bg);
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  color: var(--text);
+  height: 36px;
+  vertical-align: middle;
+  border-bottom: 2px solid var(--accent);
+}
 .sticky-col { position: sticky; left: 0; background: var(--card-bg); z-index: 4; text-align: left; }
+.month-grid thead th.sticky-col { z-index: 5; color: var(--accent-light); }
+.mv-day-header { font-size: 0.72rem; font-weight: 700; color: var(--text); }
 .cell-box { width: 18px; height: 18px; border-radius: 4px; margin: auto; }
 .cell-done { background: linear-gradient(135deg,#16a34a,#22c55e); }
 .cell-miss { background: linear-gradient(135deg,#b91c1c,#ef4444); }
