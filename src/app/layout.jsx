@@ -1,0 +1,15 @@
+import './globals.css';
+import './styles/todo.css';
+import AppShell from '@/components/AppShell';
+
+export const metadata = { title: 'Activity Tracker' };
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <AppShell>{children}</AppShell>
+      </body>
+    </html>
+  );
+}
