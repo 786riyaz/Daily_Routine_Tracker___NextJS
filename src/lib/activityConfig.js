@@ -1,4 +1,3 @@
-// src/lib/activityConfig.js
 export const CATEGORY_META = {
   "Salah": { icon: "🕌", color: "#7c3aed" },
   "Health": { icon: "🏋", color: "#16a34a" },

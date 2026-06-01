@@ -1,4 +1,3 @@
-// src/app/api/history/route.js
 import pool from '@/lib/db';
 
 export async function GET() {

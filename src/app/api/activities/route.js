@@ -1,4 +1,3 @@
-// src/app/api/activities/route.js
 import pool from '@/lib/db';
 import { DEFAULT_DAILY_NAMES, DEFAULT_WEEKLY_ITEMS } from '@/lib/activityConfig';
 

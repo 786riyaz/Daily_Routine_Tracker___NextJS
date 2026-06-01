@@ -1,4 +1,3 @@
-// src/app/api/todos/[id]/route.js
 import pool from '@/lib/db';
 
 export async function PATCH(req, { params }) {

@@ -1,4 +1,3 @@
-// src/components/CategoryPill.jsx
 'use client';
 import { CATEGORY_META } from '@/lib/activityConfig';
 
