@@ -1,22 +1,18 @@
 'use client';
 import { useState } from 'react';
 import Navbar from './Navbar';
-
 export default function AppShell({ children }) {
   const [theme, setTheme] = useState('theme-dark');
-
   function cycleTheme() {
     setTheme(t => t === 'theme-dark' ? 'theme-light' : t === 'theme-light' ? 'theme-purple' : 'theme-dark');
   }
-
   const themeLabel = theme === 'theme-dark' ? '🌙 Dark' : theme === 'theme-light' ? '☀️ Light' : '🟣 Purple';
-
   return (
     <div className={theme} style={{ minHeight: '100vh', background: 'var(--bg-gradient)' }}>
       <div className="app-shell">
         <div className="app-header">
           <div className="header-top">
-            <div>
+            <div style={{ minWidth: 0 }}>
               <h1>Activity Tracker</h1>
               <p className="muted">Track your daily &amp; weekly activities with a clean minimal UI.</p>
             </div>
@@ -32,7 +28,6 @@ export default function AppShell({ children }) {
     </div>
   );
 }
-
 function ExportImportButtons() {
   async function exportBackup() {
     const res = await fetch('/api/backup');
@@ -43,7 +38,6 @@ function ExportImportButtons() {
     a.href = url; a.download = `tracker-backup-${new Date().toISOString().split('T')[0]}.json`;
     a.click(); URL.revokeObjectURL(url);
   }
-
   async function importBackup(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -56,7 +50,6 @@ function ExportImportButtons() {
     } catch { alert('Invalid backup file'); }
     e.target.value = '';
   }
-
   return (
     <>
       <button className="btn-small" onClick={exportBackup}>↓ Export</button>

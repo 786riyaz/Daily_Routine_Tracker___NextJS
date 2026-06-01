@@ -2,20 +2,16 @@
 import { useState, useEffect } from 'react';
 import CategoryPill from '@/components/CategoryPill';
 import { getDailyMeta, getWeeklyMeta } from '@/lib/activityConfig';
-
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-
 function toLocalDateKey(d) {
   return d.toLocaleDateString('en-CA'); // YYYY-MM-DD in local time
 }
-
 export default function TrackerPage() {
   const [currentDate, setCurrentDate] = useState(() => toLocalDateKey(new Date()));
   const [activities, setActivities] = useState({ daily: [], weekly: [] });
   const [history, setHistory] = useState({});
   const [customMeta, setCustomMeta] = useState({});
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     Promise.all([
       fetch('/api/activities').then(r => r.json()),
@@ -25,22 +21,18 @@ export default function TrackerPage() {
       setActivities(acts); setHistory(hist); setCustomMeta(meta); setLoading(false);
     });
   }, []);
-
   const dayName = new Date(currentDate).toLocaleDateString('en-US', { weekday: 'short' });
   const daily = history[currentDate]?.daily || {};
   const weekly = history[currentDate]?.weekly || {};
   const todaysWeekly = activities.weekly.filter(w => w.days && w.days.includes(dayName));
-
   const dailyDoneCount = activities.daily.filter(n => daily[n]).length;
   const weeklyDoneCount = todaysWeekly.filter(w => weekly[w.name]).length;
-
   // Sort daily by time
   const sortedDaily = [...activities.daily].sort((a, b) => {
     const ma = getDailyMeta(a, customMeta);
     const mb = getDailyMeta(b, customMeta);
     return (ma.sortKey || '99:99').localeCompare(mb.sortKey || '99:99');
   });
-
   async function updateDayStatus(type, name, value) {
     setHistory(h => ({
       ...h,
@@ -55,7 +47,6 @@ export default function TrackerPage() {
       body: JSON.stringify({ date: currentDate, type, name, value }),
     });
   }
-
   function goPrev() {
     const d = new Date(currentDate); d.setDate(d.getDate() - 1);
     setCurrentDate(d.toISOString().split('T')[0]);
@@ -65,9 +56,7 @@ export default function TrackerPage() {
     setCurrentDate(d.toISOString().split('T')[0]);
   }
   function goToday() { setCurrentDate(toLocalDateKey(new Date())); }
-
   if (loading) return <div className="loading-state">Loading...</div>;
-
   return (
     <div className="layout">
       <div className="card">
@@ -87,7 +76,6 @@ export default function TrackerPage() {
           </div>
           <button className="icon-btn" onClick={goNext}>▶</button>
         </div>
-
         {/* DAILY */}
         <h3>Daily Activities</h3>
         {sortedDaily.map(name => {
@@ -106,7 +94,6 @@ export default function TrackerPage() {
             </label>
           );
         })}
-
         {/* WEEKLY */}
         <h3>Weekly ({dayName})</h3>
         {todaysWeekly.length === 0 && <p className="muted">No weekly activities scheduled for {dayName}.</p>}
