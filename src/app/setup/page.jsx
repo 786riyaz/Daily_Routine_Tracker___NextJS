@@ -87,11 +87,11 @@ export default function SetupPage() {
             onChange={e => setDailyInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && addDaily()} />
           <button className="btn-small" style={{ flexShrink: 0 }} onClick={addDaily}>Add</button>
         </div>
-        <div className="form-row" style={{ flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
+        <div className="form-row setup-meta-row" style={{ flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
           <select className="input" style={{ width: 'auto', flex: 1 }} value={dailyCat} onChange={e => setDailyCat(e.target.value)}>
             {CATEGORY_ORDER.map(c => <option key={c} value={c}>{CATEGORY_META[c]?.icon} {c}</option>)}
           </select>
-          <input type="time" className="input" style={{ width: 'auto', flex: '0 0 140px' }} value={dailyTime} onChange={e => setDailyTime(e.target.value)} />
+          <input type="time" className="input setup-time-input" style={{ width: 140, flex: '0 0 140px' }} value={dailyTime} onChange={e => setDailyTime(e.target.value)} />
         </div>
         <ul className="list">
           {sortedDaily.map(name => {
@@ -122,7 +122,7 @@ export default function SetupPage() {
             onChange={e => setWeeklyInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && addWeekly()} />
           <button className="btn-small" style={{ flexShrink: 0 }} onClick={addWeekly}>Add</button>
         </div>
-        <div className="form-row" style={{ flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+        <div className="form-row setup-meta-row" style={{ flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
           <select className="input" style={{ width: 'auto', flex: 1 }} value={weeklyCat} onChange={e => setWeeklyCat(e.target.value)}>
             {CATEGORY_ORDER.map(c => <option key={c} value={c}>{CATEGORY_META[c]?.icon} {c}</option>)}
           </select>

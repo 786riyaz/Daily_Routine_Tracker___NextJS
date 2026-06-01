@@ -2,11 +2,9 @@
 import { useState, useEffect } from 'react';
 import CategoryPill from '@/components/CategoryPill';
 import { getDailyMeta, getWeeklyMeta } from '@/lib/activityConfig';
-
 function toDateKey(y, m, d) {
   return `${y}-${String(m + 1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
 }
-
 export default function MonthViewPage() {
   const today = new Date();
   const [yearMonth, setYearMonth] = useState(() => `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2,'0')}`);
@@ -14,7 +12,6 @@ export default function MonthViewPage() {
   const [activities, setActivities] = useState({ daily: [], weekly: [] });
   const [customMeta, setCustomMeta] = useState({});
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     Promise.all([
       fetch('/api/history').then(r => r.json()),
@@ -24,19 +21,15 @@ export default function MonthViewPage() {
       setHistory(hist); setActivities(acts); setCustomMeta(meta); setLoading(false);
     });
   }, []);
-
   const [year, month0] = yearMonth.split('-').map(Number);
-  const month = month0 - 1; // 0-indexed
+  const month = month0 - 1;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const dayNums = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-
-  // Sort daily by time
   const sortedDaily = [...activities.daily].sort((a, b) => {
     const ma = getDailyMeta(a, customMeta);
     const mb = getDailyMeta(b, customMeta);
     return (ma.sortKey || '99:99').localeCompare(mb.sortKey || '99:99');
   });
-
   function cellStatus(name, type, day) {
     const dk = toDateKey(year, month, day);
     const entry = history[dk];
@@ -44,15 +37,12 @@ export default function MonthViewPage() {
     const done = type === 'daily' ? !!entry.daily?.[name] : !!entry.weekly?.[name];
     return done ? 'done' : 'miss';
   }
-
   function isScheduledWeekly(w, day) {
     const dk = toDateKey(year, month, day);
     const dayName = new Date(dk).toLocaleDateString('en-US', { weekday: 'short' });
     return w.days && w.days.includes(dayName);
   }
-
   if (loading) return <div className="loading-state">Loading...</div>;
-
   return (
     <div className="layout">
       <div className="card">
@@ -65,8 +55,6 @@ export default function MonthViewPage() {
             style={{ padding: '6px 10px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card-bg)', color: 'var(--text)', fontSize: '0.9rem', outline: 'none' }}
           />
         </div>
-
-        {/* DAILY */}
         {sortedDaily.length > 0 && (
           <>
             <h3>Daily Activities</h3>
@@ -102,8 +90,6 @@ export default function MonthViewPage() {
             </div>
           </>
         )}
-
-        {/* WEEKLY */}
         {activities.weekly.length > 0 && (
           <>
             <h3 style={{ marginTop: 20 }}>Weekly Activities</h3>
@@ -122,9 +108,7 @@ export default function MonthViewPage() {
                       <tr key={w.name}>
                         <td className="sticky-col mv-name-col">
                           <div className="mv-cell-name">{w.name}</div>
-                          <div className="mv-cell-meta">
-                            <CategoryPill category={meta.category} />
-                          </div>
+                          <div className="mv-cell-meta"><CategoryPill category={meta.category} /></div>
                         </td>
                         {dayNums.map(d => {
                           const scheduled = isScheduledWeekly(w, d);
